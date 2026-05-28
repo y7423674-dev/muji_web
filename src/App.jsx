@@ -368,26 +368,46 @@ function ProductVisual({ type }) {
 
 function EvidenceVideo() {
   const [showHint, setShowHint] = useState(false);
+  const [openVideo, setOpenVideo] = useState(false);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-      <div className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <p className="text-xs tracking-[0.25em] text-stone-400">FIELD OBSERVATION</p>
-            <h3 className="mt-2 text-2xl font-semibold text-stone-950">扫码问题现场视频</h3>
-          </div>
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-stone-950 text-white">
-            <ScanLine size={22} />
-          </div>
-        </div>
+    <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr]">
+      <div className="rounded-[2.5rem] border border-stone-200 bg-white/80 p-5 shadow-sm">
+        <button
+          type="button"
+          onClick={() => setOpenVideo(true)}
+          className="group relative block w-full overflow-hidden rounded-[2rem] border border-stone-200 bg-[#efe7d7] text-left shadow-sm"
+          aria-label="点击放大播放扫码问题现场视频"
+        >
+          <div className="relative aspect-[4/5] w-full overflow-hidden bg-stone-200">
+            <video
+              className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.02] group-hover:opacity-100"
+              muted
+              preload="metadata"
+              playsInline
+            >
+              <source src="/scan-problem.mp4" type="video/mp4" />
+            </video>
 
-        <div className="mt-6 overflow-hidden rounded-3xl border border-stone-200 bg-stone-950">
-        <video className="evidence-video" controls preload="metadata" playsInline>
-          <source src="/scan-problem.mp4" type="video/mp4" />
-          当前浏览器无法播放该视频。
-        </video>
-        </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/55 via-stone-950/10 to-transparent" />
+
+            <div className="absolute left-5 top-5 rounded-full bg-white/85 px-4 py-2 text-xs font-medium tracking-[0.2em] text-stone-700 backdrop-blur">
+              FIELD VIDEO
+            </div>
+
+            <div className="absolute inset-x-0 bottom-0 p-6 text-white">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white text-stone-950 shadow-sm transition group-hover:scale-105">
+                <Play size={22} />
+              </div>
+              <h3 className="text-2xl font-semibold leading-snug">
+                扫码问题现场观察
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-white/80">
+                点击卡片后放大播放，适合课堂展示时先呈现现场材料。
+              </p>
+            </div>
+          </div>
+        </button>
 
         <button
           type="button"
@@ -399,24 +419,61 @@ function EvidenceVideo() {
 
         {showHint ? (
           <div className="mt-4 rounded-3xl bg-[#f7f3ea] p-5 text-sm leading-7 text-stone-600">
-            如果预览里视频无法播放，不代表代码有问题。正式运行时，把视频文件放到项目 public 文件夹，并保持文件名为“扫码问题.mp4”。Vite 或 React 项目中通常使用 /扫码问题.mp4。
+            如果视频无法播放，请确认文件已放入 public 文件夹，并命名为
+            scan-problem.mp4。也可以在浏览器直接打开 /scan-problem.mp4
+            测试路径是否正确。
           </div>
         ) : null}
       </div>
 
-      <div className="grid gap-4">
-        {[
-          ["观察对象", "用户在 MUJI 自助结账中面对扫码识别不稳定或规则不清的问题。"],
-          ["可呈现内容", "视频可以作为课堂展示中的第一手材料，帮助观众先看到问题，再理解分析。"],
-          ["分析入口", "观看时重点关注用户是否需要反复调整角度、寻找识别码、等待反馈或重新尝试。"],
-        ].map(([title, text]) => (
-          <div key={title} className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
-            <p className="text-sm tracking-[0.25em] text-stone-400">VIDEO NOTE</p>
-            <h4 className="mt-2 text-xl font-semibold text-stone-950">{title}</h4>
-            <p className="mt-3 leading-7 text-stone-600">{text}</p>
-          </div>
-        ))}
+      <div className="flex flex-col justify-center">
+        <div>
+          <p className="mb-3 text-xs font-semibold tracking-[0.35em] text-stone-500">
+            OBSERVATION NOTE
+          </p>
+          <h3 className="text-3xl font-semibold tracking-tight text-stone-950">
+            从现场操作进入问题分析
+          </h3>
+        </div>
+
+        <div className="mt-6 rounded-[2rem] border border-stone-200 bg-white/85 p-8 shadow-sm">
+          <p className="text-[17px] leading-10 text-stone-600">
+            用户在 MUJI
+            自助结账中面对扫码识别不稳定或规则不清的问题。用户面对食品类商品第一次会扫描条形码，发现无法识别后才会意识到需要找二维码。用户面对服装类商品时，完全没有扫码反馈，直到结账失败才会意识到需要放入感应区。
+          </p>
+        </div>
       </div>
+
+      {openVideo ? (
+        <div
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-stone-950/80 p-4 backdrop-blur-sm"
+          onClick={() => setOpenVideo(false)}
+        >
+          <div
+            className="relative w-full max-w-5xl overflow-hidden rounded-[2rem] bg-stone-950 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setOpenVideo(false)}
+              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-stone-950 shadow-sm transition hover:bg-white"
+              aria-label="关闭视频"
+            >
+              <X size={20} />
+            </button>
+
+            <video
+              className="max-h-[82vh] w-full bg-stone-950 object-contain"
+              controls
+              autoPlay
+              playsInline
+            >
+              <source src="/scan-problem.mp4" type="video/mp4" />
+              当前浏览器无法播放该视频。
+            </video>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
