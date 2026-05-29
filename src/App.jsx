@@ -708,7 +708,15 @@ function AccessibilityLab() {
     }
   };
 
-  const previewClass = `rounded-[2.4rem] border p-6 shadow-sm transition ${highContrast ? "border-white bg-black text-white" : "border-stone-200 bg-white text-stone-900"} ${largeText ? "text-[18px]" : "text-base"} ${lowStimulus ? "saturate-50" : ""}`;
+  const previewClass = `rounded-[2.4rem] border p-6 shadow-sm transition ${
+  highContrast ? "border-white bg-black text-white" : "border-stone-200 bg-white text-stone-900"
+} ${
+  largeText ? "access-large-text" : ""
+} ${
+  keyboardFocus ? "access-focus-mode" : ""
+} ${
+  lowStimulus ? "saturate-50" : ""
+}`;
   const timerPercent = Math.max(0, Math.min(100, (remaining / totalTime) * 100));
   const disabledClass = !timerRunning || remaining <= 0 ? "opacity-45" : "";
 
